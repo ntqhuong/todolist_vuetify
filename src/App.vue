@@ -12,6 +12,7 @@
                   <v-spacer></v-spacer>
                 </v-toolbar>
               </v-card>
+              <CreateTodo/>
               <todo-list />
             </v-col>
           </v-row>
@@ -23,11 +24,13 @@
 
 <script>
 import TodoList from "./components/TodoList";
+import CreateTodo from "./components/CreateTodo";
+import Todo from "./components/Todo";
 export default {
   name: "App",
 
   components: {
-    TodoList,
+    TodoList,CreateTodo,Todo
   },
 };
 </script>
