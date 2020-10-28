@@ -10,7 +10,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>My Students</v-toolbar-title>
+        <v-toolbar-title>Todo List</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
               <v-text-field
         v-model="search"
@@ -35,41 +35,11 @@
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.ten"
-                      label="Tên"
+                      v-model="editedItem.description"
+                      label="Description"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.lop"
-                      label="Lớp"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.mssv"
-                      label="Mssv"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.sdt"
-                      label="Số điện thoại"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.ns"
-                      label="Ngày sinh"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.k"
-                      label="Khóa"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
+                </v-row> 
               </v-container>
             </v-card-text>
 
@@ -126,36 +96,16 @@ export default {
     dialogDelete: false,
     search: '',
     headers: [
-      {
-        text: "Tên",
-        align: "start",
-       
-        value: "ten"
-      },
-      { text: "Lớp", value: "lop" },
-      { text: "MSSV", value: "mssv" },
-      { text: "Số ĐT", value: "sdt" },
-      { text: "Ngày sinh", value: "ns" },
-      { text: "Khóa", value: "k" },
+      {text: "Description",align: "start",value: "description"},
       { text: "Actions", value: "actions", sortable: false }
     ],
     desserts: [],
     editedIndex: -1,
     editedItem: {
-      ten: "",
-      lop: 0,
-      mssv: 0,
-      sdt: 0,
-      ns: 0,
-      k: 0
+      description: ""
     },
     defaultItem: {
-      ten: "",
-      lop: 0,
-      mssv: 0,
-      sdt: 0,
-      ns: 0,
-      k: 0
+    description: ""
     }
   }),
 
@@ -182,85 +132,15 @@ export default {
     initialize() {
       this.desserts = [
         {
-          ten: "Hiddleston",
-          lop: 1,
-          mssv: 62131,
-          sdt: 2543454,
-          ns: 15 / 2 / 2002,
-          k: 2018
+          description: "Do the dishes",
         },
         {
-          ten: "Elizabeth",
-          lop: 2,
-          mssv: 54645,
-          sdt: 120142,
-          ns: 15 / 2 / 2002,
-          k: 2018
+          description: "Take out the trash",
         },
         {
-          ten: "Emily",
-          lop: 3,
-          mssv: 34556,
-          sdt: 54645,
-          ns: 4.0,
-          k: 2020
+          description: "Finish doing laundry",
         },
-        {
-          ten: "Emma",
-          lop: 4,
-          mssv: 3245687,
-          sdt: 167505,
-          ns: 4.0,
-          k: 2011
-        },
-        {
-          ten: "Jessica",
-          lop: 5,
-          mssv: 24045,
-          sdt: 542,
-          ns: 245452,
-          k: 1
-        },
-        {
-          ten: "Jennifer",
-          lop: 7,
-          mssv: 74564,
-          sdt: 244512,
-          ns: 456,
-          k: 452345
-        },
-        {
-          ten: "Laura",
-          lop: 8,
-          mssv: 78654,
-          sdt: 54645,
-          ns: 321312,
-          k: 56654
-        },
-        {
-          ten: "Linda",
-          lop: 5,
-          mssv: 54353,
-          sdt: 13424,
-          ns: 324,
-          k: 36546
-        },
-        {
-          ten: "Rebecca",
-          lop: 4,
-          mssv: 86856,
-          sdt: 643634,
-          ns: 234,
-          k: 765756
-        },
-        {
-          ten: "Maria",
-          lop: 10,
-          mssv: 845,
-          sdt: 5645645,
-          ns: 546,
-          k: 54353
-        }
+       
       ];
     },
 
@@ -308,7 +188,7 @@ export default {
   }
 };
 </script>
-<style >
+<style>
 .v-main__wrap {
 
     margin: 100px;
