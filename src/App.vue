@@ -31,8 +31,6 @@ export default {
   },
 };
 </script>
-<style>
-.done {
-  text-decoration: line-through;
-}
+<style lang="scss">
+  
 </style>
