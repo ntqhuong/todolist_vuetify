@@ -8,11 +8,12 @@
               <v-card>
                 <v-toolbar color="yellow darken-4" dark>
                   <v-toolbar-title class="headline">Todo App</v-toolbar-title>
-
                   <v-spacer></v-spacer>
                 </v-toolbar>
               </v-card>
-              <todo-list />
+              <br>
+              <todo-list/>
+              
             </v-col>
           </v-row>
         </v-container>
@@ -23,11 +24,13 @@
 
 <script>
 import TodoList from "./components/TodoList";
+import CreateToDo from "./components/CreateTodo";
+import Todo from "./components/Todo.vue"
 export default {
   name: "App",
 
   components: {
-    TodoList,
+    TodoList,CreateToDo,Todo
   },
 };
 </script>
