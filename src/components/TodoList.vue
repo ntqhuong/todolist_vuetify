@@ -69,23 +69,30 @@
         </v-toolbar>
       </template>
       <template v-slot:item.description="{ item }">
-        <v-chip color="white" class="todo-item" @click="toggleTodo(item)">
-          {{ item.description }}
-        </v-chip>
-      </template>
-      <template v-slot:item.actions="{ item }">
-        <v-btn color="blue darken-1" small class="mr-2" @click="editItem(item)">
-          <b>Edit</b>
-        </v-btn>
-        <v-btn color="red" small @click="deleteItem(item)">
-          <b>Delete</b>
-        </v-btn>
-      </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">
-          Reset
-        </v-btn>
-      </template>
+          <v-chip
+            color="white"
+            class="todo-item"
+            @click="toggleTodo(item)"
+            :class="{
+              done: item.completed,
+            }"
+          >
+            {{ item.description }}
+          </v-chip>
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-btn
+            color="blue darken-1"
+            small
+            class="mr-2"
+            @click="editItem(item)"
+          >
+            <b>Edit</b>
+          </v-btn>
+          <v-btn color="red" small @click="deleteItem(item)">
+            <b>Delete</b>
+          </v-btn>
+        </template>
     </v-data-table>
   </v-card>
 </template>
@@ -103,9 +110,11 @@ export default {
     editedIndex: -1,
     editedItem: {
       description: "",
+      completed: false
     },
     defaultItem: {
       description: "",
+      completed: false
     },
   }),
 
@@ -215,7 +224,7 @@ export default {
     }
   }
 }
-.completed {
+.done {
   text-decoration: line-through;
 }
 .todo-item {
