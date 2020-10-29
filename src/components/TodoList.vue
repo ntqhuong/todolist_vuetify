@@ -1,12 +1,11 @@
 <template>
-  <v-card>
+  <v-card class="col-12">
     <v-data-table
       :headers="headers"
-      :items="desserts"
-      @click="toggleTodo(desserts)"
+      :items="todos"
       :search="search"
-      sort-by="calories"
-      class="elevation-1"
+      sort-by="description"
+      class="elevation-2"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -21,8 +20,8 @@
           ></v-text-field>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="warning" dark class="mb-2" v-bind="attrs" v-on="on">
-                New Item
+              <v-btn color="white" light class="mb-2" v-bind="attrs" v-on="on">
+                New Todo
               </v-btn>
             </template>
             <v-card>
@@ -45,10 +44,10 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="secondary" @click="close">
+                <v-btn color="blue" text @click="close">
                   Cancel
                 </v-btn>
-                <v-btn color="blue" @click="save">
+                <v-btn color="blue" text @click="save">
                   Save
                 </v-btn>
               </v-card-actions>
@@ -61,27 +60,39 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="secondary" @click="closeDelete">Cancel</v-btn>
-                <v-btn color="blue" @click="deleteItemConfirm">OK</v-btn>
+                <v-btn color="blue" text @click="closeDelete">Cancel</v-btn>
+                <v-btn color="red" text @click="deleteItemConfirm">OK</v-btn>
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
-        <v-btn color="red" small class="mr-2" @click="editItem(item)">
-          Edit
-        </v-btn>
-        <v-btn color="success" small @click="deleteItem(item)">
-          Delete
-        </v-btn>
-      </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">
-          Reset
-        </v-btn>
-      </template>
+      <template v-slot:item.description="{ item }">
+          <v-chip
+            color="white"
+            class="todo-item"
+            @click="toggleTodo(item)"
+            :class="{
+              done: item.completed,
+            }"
+          >
+            {{ item.description }}
+          </v-chip>
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-btn
+            color="blue darken-1"
+            small
+            class="mr-2"
+            @click="editItem(item)"
+          >
+            <b>Edit</b>
+          </v-btn>
+          <v-btn color="red" small @click="deleteItem(item)">
+            <b>Delete</b>
+          </v-btn>
+        </template>
     </v-data-table>
   </v-card>
 </template>
@@ -95,15 +106,18 @@ export default {
       { text: "Description", align: "start", value: "description" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    desserts: [],
+    todos: [],
     editedIndex: -1,
     editedItem: {
       description: "",
+      completed: false
     },
     defaultItem: {
       description: "",
+      completed: false
     },
   }),
+
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
@@ -117,12 +131,14 @@ export default {
       val || this.closeDelete();
     },
   },
+
   created() {
     this.initialize();
   },
+
   methods: {
     initialize() {
-      this.desserts = [
+      this.todos = [
         {
           description: "Do the dishes",
           completed: false,
@@ -137,23 +153,26 @@ export default {
         },
       ];
     },
-    toggleTodo(desserts) {
-      desserts.completed = !desserts.completed;
+    toggleTodo(todo) {
+      todo.completed = !todo.completed;
     },
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.todos.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
+
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.todos.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
+
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+      this.todos.splice(this.editedIndex, 1);
       this.closeDelete();
     },
+
     close() {
       this.dialog = false;
       this.$nextTick(() => {
@@ -168,11 +187,12 @@ export default {
         this.editedIndex = -1;
       });
     },
+
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        Object.assign(this.todos[this.editedIndex], this.editedItem);
       } else {
-        this.desserts.push(this.editedItem);
+        this.todos.push(this.editedItem);
       }
       this.close();
     },
@@ -180,19 +200,33 @@ export default {
 };
 </script>
 
-<style lang="sass">
-.v-main__wrap
-  margin: 100px
-  margin-top: 40px
-.theme--light
-  &.v-data-table
-    background-color: rgb(248, 227, 200)
-.v-toolbar__content, .v-toolbar__extension
-  background-color: indianred
-  border-radius: 5px
-.v-input--hide-details
-  & > .v-input__control
-    & > .v-input__slot
-      width: 95%
-      margin-bottom: 8px
+<style lang="scss">
+.v-main__wrap {
+  margin: 100px;
+  margin-top: 40px;
+}
+.theme--light {
+  &.v-data-table {
+    background-color: #fff;
+  }
+}
+.v-toolbar__content,
+.v-toolbar__extension {
+  background-color: rgb(112, 147, 243);
+  border-radius: 5px;
+}
+.v-input--hide-details {
+  & > .v-input__control {
+    & > .v-input__slot {
+      width: 95%;
+      margin-bottom: 8px;
+    }
+  }
+}
+.done {
+  text-decoration: line-through;
+}
+.todo-item {
+  cursor: pointer;
+}
 </style>
