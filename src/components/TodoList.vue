@@ -110,9 +110,11 @@ export default {
     editedIndex: -1,
     editedItem: {
       description: "",
+      completed: false
     },
     defaultItem: {
       description: "",
+      completed: false
     },
   }),
 
