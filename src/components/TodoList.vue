@@ -6,6 +6,10 @@
       :search="search"
       sort-by="description"
       class="elevation-2"
+      :page.sync="page"
+      :items-per-page="itemsPerPage"
+      hide-default-footer
+      @page-count="pageCount = $event"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -69,36 +73,52 @@
         </v-toolbar>
       </template>
       <template v-slot:item.description="{ item }">
-          <v-chip
-            color="white"
+        <v-list-item-content>
+          <v-list-item-title
             class="todo-item"
             @click="toggleTodo(item)"
             :class="{
               done: item.completed,
             }"
+            >{{ item.description }}</v-list-item-title
           >
-            {{ item.description }}
-          </v-chip>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <v-btn
-            color="blue darken-1"
-            small
-            class="mr-2"
-            @click="editItem(item)"
+          <v-list-item-subtitle class="todoDay"
+            >Added on: {{ date }}{{ nth }} {{ todoDay }}
+            {{ year }}</v-list-item-subtitle
           >
-            <b>Edit</b>
-          </v-btn>
-          <v-btn color="red" small @click="deleteItem(item)">
-            <b>Delete</b>
-          </v-btn>
-        </template>
+        </v-list-item-content>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-btn color="blue darken-1" small class="mr-2" @click="editItem(item)">
+          <b>Edit</b>
+        </v-btn>
+        <v-btn color="red" small @click="deleteItem(item)">
+          <b>Delete</b>
+        </v-btn>
+      </template>
     </v-data-table>
+
+    <!-- PAGINATION -->
+    <div class="text-center pt-2">
+      <v-pagination v-model="page" :length="pageCount"></v-pagination>
+      <v-text-field
+        class="itemsPerPage"
+        :value="itemsPerPage"
+        label="Todos per page"
+        type="number"
+        min="-1"
+        max="15"
+        @input="itemsPerPage = parseInt($event, 10)"
+      ></v-text-field>
+    </div>
   </v-card>
 </template>
 <script>
 export default {
   data: () => ({
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 10,
     dialog: false,
     dialogDelete: false,
     search: "",
@@ -110,17 +130,47 @@ export default {
     editedIndex: -1,
     editedItem: {
       description: "",
-      completed: false
+      completed: false,
     },
     defaultItem: {
       description: "",
-      completed: false
+      completed: false,
     },
+    date: new Date().getDate(),
+    year: new Date().getFullYear(),
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+    todoDay() {
+      var d = new Date();
+      var days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      return days[d.getDay()];
+    },
+
+    nth() {
+      var d = new Date().getDate();
+      if (d > 3 && d < 21) return "th";
+      switch (d % 10) {
+        case 1:
+          return "st";
+        case 2:
+          return "nd";
+        case 3:
+          return "rd";
+        default:
+          return "th";
+      }
     },
   },
 
@@ -229,5 +279,14 @@ export default {
 }
 .todo-item {
   cursor: pointer;
+}
+.todoDay {
+  font-size: 12px;
+  color: rgb(197, 187, 187);
+}
+.itemsPerPage {
+  width: 20%;
+  margin-left: 80%;
+  margin-top: -45px;
 }
 </style>
