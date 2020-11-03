@@ -42,6 +42,42 @@
                         label="Description"
                       ></v-text-field>
                     </v-col>
+
+                    <template>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-dialog
+                          ref="dialog"
+                          v-model="modal"
+                          :return-value.sync="datePicker"
+                          persistent
+                          width="290px"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              v-model="datePicker"
+                              label="Todo day"
+                              prepend-icon="mdi-calendar"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                            ></v-text-field>
+                          </template>
+                          <v-date-picker v-model="datePicker" scrollable>
+                            <v-spacer></v-spacer>
+                            <v-btn text color="primary" @click="modal = false">
+                              Cancel
+                            </v-btn>
+                            <v-btn
+                              text
+                              color="primary"
+                              @click="$refs.dialog.save(datePicker)"
+                            >
+                              OK
+                            </v-btn>
+                          </v-date-picker>
+                        </v-dialog>
+                      </v-col>
+                    </template>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -83,8 +119,7 @@
             >{{ item.description }}</v-list-item-title
           >
           <v-list-item-subtitle class="todoDay"
-            >Added on: {{ date }}{{ nth }} {{ todoDay }}
-            {{ year }}</v-list-item-subtitle
+            >Added on: {{ item.date }}</v-list-item-subtitle
           >
         </v-list-item-content>
       </template>
@@ -130,48 +165,52 @@ export default {
     editedIndex: -1,
     editedItem: {
       description: "",
+      date: "",
       completed: false,
     },
     defaultItem: {
       description: "",
+      date: "",
       completed: false,
     },
-    date: new Date().getDate(),
-    year: new Date().getFullYear(),
+    // dateAddOn: new Date().getDate(),
+    // year: new Date().getFullYear(),
+    datePicker: new Date().toISOString().substr(0, 10),
+    modal: false,
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    todoDay() {
-      var d = new Date();
-      var days = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
-      return days[d.getDay()];
-    },
+    // todoDay() {
+    //   var d = new Date();
+    //   var days = [
+    //     "Sunday",
+    //     "Monday",
+    //     "Tuesday",
+    //     "Wednesday",
+    //     "Thursday",
+    //     "Friday",
+    //     "Saturday",
+    //   ];
+    //   return days[d.getDay()];
+    // },
 
-    nth() {
-      var d = new Date().getDate();
-      if (d > 3 && d < 21) return "th";
-      switch (d % 10) {
-        case 1:
-          return "st";
-        case 2:
-          return "nd";
-        case 3:
-          return "rd";
-        default:
-          return "th";
-      }
-    },
+    // nth() {
+    //   var d = new Date().getDate();
+    //   if (d > 3 && d < 21) return "th";
+    //   switch (d % 10) {
+    //     case 1:
+    //       return "st";
+    //     case 2:
+    //       return "nd";
+    //     case 3:
+    //       return "rd";
+    //     default:
+    //       return "th";
+    //   }
+    // },
   },
 
   watch: {
@@ -192,14 +231,17 @@ export default {
       this.todos = [
         {
           description: "Do the dishes",
+          date: this.datePicker,
           completed: false,
         },
         {
           description: "Take out the trash",
+          date: this.datePicker,
           completed: false,
         },
         {
           description: "Finish doing laundry",
+          date: this.datePicker,
           completed: false,
         },
       ];
@@ -241,6 +283,8 @@ export default {
     },
 
     save() {
+      this.editItem.date = this.datePicker;
+      console.log(this.editItem.date);
       if (this.editedIndex > -1) {
         Object.assign(this.todos[this.editedIndex], this.editedItem);
       } else {
