@@ -173,8 +173,6 @@ export default {
       date: "",
       completed: false,
     },
-    // dateAddOn: new Date().getDate(),
-    // year: new Date().getFullYear(),
     datePicker: new Date().toISOString().substr(0, 10),
     modal: false,
   }),
@@ -183,34 +181,6 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    // todoDay() {
-    //   var d = new Date();
-    //   var days = [
-    //     "Sunday",
-    //     "Monday",
-    //     "Tuesday",
-    //     "Wednesday",
-    //     "Thursday",
-    //     "Friday",
-    //     "Saturday",
-    //   ];
-    //   return days[d.getDay()];
-    // },
-
-    // nth() {
-    //   var d = new Date().getDate();
-    //   if (d > 3 && d < 21) return "th";
-    //   switch (d % 10) {
-    //     case 1:
-    //       return "st";
-    //     case 2:
-    //       return "nd";
-    //     case 3:
-    //       return "rd";
-    //     default:
-    //       return "th";
-    //   }
-    // },
   },
   watch: {
     dialog(val) {
