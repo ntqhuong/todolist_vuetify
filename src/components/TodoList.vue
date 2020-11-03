@@ -54,15 +54,15 @@
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                              v-model="datePicker"
-                              label="Todo day"
+                              v-model="editedItem.date"
+                              label="Todo Date"
                               prepend-icon="mdi-calendar"
                               readonly
                               v-bind="attrs"
                               v-on="on"
                             ></v-text-field>
                           </template>
-                          <v-date-picker v-model="datePicker" scrollable>
+                          <v-date-picker v-model="editedItem.date" scrollable>
                             <v-spacer></v-spacer>
                             <v-btn text color="primary" @click="modal = false">
                               Cancel
@@ -70,7 +70,7 @@
                             <v-btn
                               text
                               color="primary"
-                              @click="$refs.dialog.save(datePicker)"
+                              @click="$refs.dialog.save(editedItem.date)"
                             >
                               OK
                             </v-btn>
@@ -283,8 +283,6 @@ export default {
     },
 
     save() {
-      this.editItem.date = this.datePicker;
-      console.log(this.editItem.date);
       if (this.editedIndex > -1) {
         Object.assign(this.todos[this.editedIndex], this.editedItem);
       } else {
