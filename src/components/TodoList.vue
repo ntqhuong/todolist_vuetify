@@ -4,7 +4,7 @@
       :headers="headers"
       :items="todos"
       :search="search"
-      sort-by="description"
+      :sort-by="['title']"
       class="elevation-2"
       :page.sync="page"
       :items-per-page="itemsPerPage"
@@ -37,6 +37,10 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.title"
+                        label="Title"
+                      ></v-text-field>
                       <v-text-field
                         v-model="editedItem.description"
                         label="Description"
@@ -108,19 +112,24 @@
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item.description="{ item }">
+      <template v-slot:item.title="{ item }">
         <v-list-item-content>
           <v-list-item-title
-            class="todo-item"
+            class="todo-title"
             @click="toggleTodo(item)"
             :class="{
               done: item.completed,
             }"
-            >{{ item.description }}</v-list-item-title
+            >{{ item.title }}</v-list-item-title
           >
           <v-list-item-subtitle class="todoDay"
             >Added on: {{ item.date }}</v-list-item-subtitle
           >
+        </v-list-item-content>
+      </template>
+      <template v-slot:item.description="{ item }">
+        <v-list-item-content class="todo-desc">
+          {{item.description}}
         </v-list-item-content>
       </template>
       <template v-slot:item.actions="{ item }">
@@ -158,17 +167,20 @@ export default {
     dialogDelete: false,
     search: "",
     headers: [
-      { text: "Description", align: "start", value: "description" },
+      { text: "Title", align: "start", value: "title" },
+      { text: "Description", align: "start", value: "description", sortable: false },
       { text: "Actions", value: "actions", sortable: false },
     ],
     todos: [],
     editedIndex: -1,
     editedItem: {
+      title: "",
       description: "",
       date: "",
       completed: false,
     },
     defaultItem: {
+      title: "",
       description: "",
       date: "",
       completed: false,
@@ -199,17 +211,20 @@ export default {
     initialize() {
       this.todos = [
         {
-          description: "Do the dishes",
+          title: "Do the dishes",
+          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
           date: this.datePicker,
           completed: false,
         },
         {
-          description: "Take out the trash",
+          title: "Take out the trash",
+          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
           date: this.datePicker,
           completed: false,
         },
         {
-          description: "Finish doing laundry",
+          title: "Finish doing laundry",
+          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
           date: this.datePicker,
           completed: false,
         },
@@ -288,8 +303,10 @@ export default {
 .done {
   text-decoration: line-through;
 }
-.todo-item {
+.todo-title {
   cursor: pointer;
+  display: block;
+  width: 200px;
 }
 .todoDay {
   font-size: 12px;
@@ -299,5 +316,9 @@ export default {
   width: 20%;
   margin-left: 80%;
   margin-top: -45px;
+}
+.todo-desc {
+  display: block;
+  width: 500px;
 }
 </style>
